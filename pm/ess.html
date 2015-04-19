@@ -1,0 +1,505 @@
+
+
+
+
+<!DOCTYPE html>
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Executable System Specification (ESS) &mdash; HBP Neuromorphic Computing Platform Guidebook (WIP)</title>
+    
+    <link rel="stylesheet" href="../_static/hbpdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/extra.js"></script>
+    <script type="text/javascript" src="../_static/hbpdoc.js"></script>
+    <link rel="top" title="HBP Neuromorphic Computing Platform Guidebook (WIP)" href="../index.html" />
+    <link rel="up" title="The BrainScaleS “physical model” system" href="pm.html" />
+    <link rel="next" title="The Spikey “physical model” system" href="spikey.html" />
+    <link rel="prev" title="Mapping to the Wafer-Scale System" href="using_pm_newflow.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+  </head>
+  <body>
+<div class="hbpdoc-page">
+    <section class="hbpdoc-title page-header">
+        <a class="project-title" href="../index.html">HBP Neuromorphic Computing Platform Guidebook</a>
+
+        <a class="hbpdoc-toc-toggle pull-right" href>
+            <span class="zmdi zmdi-menu"></span> <span class="sr-only icon-text">Menu</span>
+        </a>
+    </section>
+    <section class="hbpdoc-main">
+        <nav class="hbpdoc-sidebar hbpdoc-container">
+            <a class="hbpdoc-toc-toggle pull-right" href>
+                <span class="zmdi zmdi-menu"></span> <span class="sr-only icon-text">Menu</span>
+            </a>
+            
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/HBP_Primary_RGB_logoOnlyScaled68px.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Executable System Specification (ESS)</a><ul>
+<li><a class="reference internal" href="#using-the-ess-docker-container">Using the ESS Docker Container</a><ul>
+<li><a class="reference internal" href="#prerequisites-tested-on-a-native-ubuntu-trusty-14-04-lts-a-64-bit-machine">Prerequisites (tested on a native Ubuntu trusty 14.04 LTS a 64-bit machine)</a></li>
+<li><a class="reference internal" href="#initial-download-upgrade-of-the-uhei-ess-system-image">Initial download/upgrade of the uhei/ess-system image</a></li>
+<li><a class="reference internal" href="#starting-the-ess-container">Starting the ESS container</a></li>
+<li><a class="reference internal" href="#testing-your-ess-container-installation">Testing your ESS container installation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#installation-of-the-ess-pynn-0-8">Installation of the ESS (PyNN 0.8)</a><ul>
+<li><a class="reference internal" href="#prerequisites-tested-on-a-native-ubuntu-saucy-13-10-on-a-64-bit-machine">Prerequisites (tested on a native Ubuntu saucy 13.10 on a 64-bit machine)</a></li>
+<li><a class="reference internal" href="#installation-of-the-ess">Installation of the ESS</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#installation-of-the-ess-pynn-0-7">Installation of the ESS (PyNN 0.7)</a><ul>
+<li><a class="reference internal" href="#id1">Prerequisites (tested on a native Ubuntu saucy 13.10 on a 64-bit machine)</a></li>
+<li><a class="reference internal" href="#id2">Installation of the ESS</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-the-ess">Using the ESS</a><ul>
+<li><a class="reference internal" href="#perfect-synapse-transformation">Perfect Synapse Transformation</a></li>
+<li><a class="reference internal" href="#pulse-loss-statistics">Pulse Loss Statistics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="using_pm_newflow.html"
+                        title="previous chapter">Mapping to the Wafer-Scale System</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="spikey.html"
+                        title="next chapter">The Spikey &#8220;physical model&#8221; system</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/pm/ess.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </nav>
+
+        <article class="hbpdoc-content">
+
+            <div class="content">
+                
+                <div class="breadcrumb breadcrumb-meta expand">
+                    
+                    <a href="pm.html">The BrainScaleS &#8220;physical model&#8221; system</a>
+                    
+                </div>
+                
+
+                <aside class="hbpdoc-hnav hbpdoc-hnav-top">
+                    
+                    <span class="hbpdoc-hnav-previous">
+                        previous: <a class="hbpdoc-hnav-link" href="using_pm_newflow.html">Mapping to the Wafer-Scale System</a>
+                    </span>
+                    
+                    
+                    <span class="hbpdoc-hnav-next">
+                        next: <a class="hbpdoc-hnav-link" href="spikey.html">The Spikey &#8220;physical model&#8221; system</a>
+                    </span>
+                    
+                </aside>
+
+                <div class="section" id="executable-system-specification-ess">
+<h1>Executable System Specification (ESS)<a class="headerlink" href="#executable-system-specification-ess" title="Permalink to this headline">¶</a></h1>
+<p>The Executable System Specification (ESS) is a software model of the BrainScaleS hardware system.
+The ESS is implemented in C++/SystemC and contains functional models of all relevant units of the wafer-scale hardware.
+It is fully executable and resembles how neural experiments will be run on the real wafer-scale system.
+It can be operated from PyNN, so that you can run neural network experiments described in PyNN with the ESS.
+This way you can already explore the capabilities of the BrainScaleS &#8220;Physical Model&#8221; system.</p>
+<div class="section" id="using-the-ess-docker-container">
+<h2>Using the ESS Docker Container<a class="headerlink" href="#using-the-ess-docker-container" title="Permalink to this headline">¶</a></h2>
+<p>There is a Docker-based LXC container (<a class="reference external" href="https://registry.hub.docker.com/u/uhei/ess-system">uhei/ess-system</a>) with a recent version of
+the ESS installed. Using this container is considered to be the simplest form
+of accessing the ESS.
+There is no need to install dependencies and build the ESS.
+It is all pre-installed on the ESS Container.
+And the container is updated on a regular basis.</p>
+<div class="section" id="prerequisites-tested-on-a-native-ubuntu-trusty-14-04-lts-a-64-bit-machine">
+<h3>Prerequisites (tested on a native Ubuntu trusty 14.04 LTS a 64-bit machine)<a class="headerlink" href="#prerequisites-tested-on-a-native-ubuntu-trusty-14-04-lts-a-64-bit-machine" title="Permalink to this headline">¶</a></h3>
+<p>You need to have Docker installed.
+On Ubuntu the Docker package is called <tt class="docutils literal"><span class="pre">docker.io</span></tt>.
+Note that there is a package named <tt class="docutils literal"><span class="pre">docker</span></tt> in the Ubuntu repositories as well.
+It is something completely different.</p>
+<p>After installing you may add yourself to the <tt class="docutils literal"><span class="pre">docker</span></tt> group.
+Otherwise you have to prepend sudo to most Docker commands.</p>
+<p>You might also want to have a look at <tt class="docutils literal"><span class="pre">/etc/default/docker.io</span></tt> after installation, especially if you&#8217;re sitting behind a proxy.
+These proxy settings are not for the containers, but for the communication to the Docker Repository (i.e. docker pull).</p>
+<div class="highlight-bash"><div class="highlight"><pre>sudo apt-get install docker.io
+<span class="c"># sudo adduser $USER docker</span>
+<span class="c"># sudo editor /etc/default/docker.io</span>
+<span class="c"># re-login</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="initial-download-upgrade-of-the-uhei-ess-system-image">
+<h3>Initial download/upgrade of the uhei/ess-system image<a class="headerlink" href="#initial-download-upgrade-of-the-uhei-ess-system-image" title="Permalink to this headline">¶</a></h3>
+<p>The following step takes some time upon first execution, depending on your internet connection.
+Later updates should generally perform faster as only changes are pulled.</p>
+<div class="highlight-bash"><div class="highlight"><pre>sudo docker pull uhei/ess-system:14.04 <span class="c"># this step is optional, docker run will pull what&#39;s needed automatically.</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="starting-the-ess-container">
+<h3>Starting the ESS container<a class="headerlink" href="#starting-the-ess-container" title="Permalink to this headline">¶</a></h3>
+<p>The execution of the downloaded image creates a new Docker container.
+Note that Docker containers are not persistent.
+But one can link a host directory for persistent user data into the container.
+The following <tt class="docutils literal"><span class="pre">docker</span> <span class="pre">run</span></tt> command does just that.
+The host directory specified by the <tt class="docutils literal"><span class="pre">VOLUME</span></tt> environment variable will be available as <tt class="docutils literal"><span class="pre">/bss/$USER</span></tt> within the container.
+If you&#8217;re interested in the option flags of the <tt class="docutils literal"><span class="pre">docker</span> <span class="pre">run</span></tt> command, run <tt class="docutils literal"><span class="pre">docker</span> <span class="pre">help</span> <span class="pre">run</span></tt>.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># docker help run</span>
+mkdir ess-data                <span class="c"># where to put user/persistent data</span>
+<span class="nv">VOLUME</span><span class="o">=</span><span class="s2">&quot;${PWD}/ess-data&quot;</span>
+<span class="c"># NB.: This step may take some time, @see above (Initial download)</span>
+sudo docker run --name ess-container --hostname ess-container <span class="se">\</span>
+        -v <span class="s2">&quot;$VOLUME:/bss/$USER&quot;</span> -ti <span class="s2">&quot;uhei/ess-system:14.04&quot;</span> /bin/bash
+</pre></div>
+</div>
+</div>
+<div class="section" id="testing-your-ess-container-installation">
+<h3>Testing your ESS container installation<a class="headerlink" href="#testing-your-ess-container-installation" title="Permalink to this headline">¶</a></h3>
+<p>You should be in the container now, as <tt class="docutils literal"><span class="pre">root</span></tt> in the directory <tt class="docutils literal"><span class="pre">/bss</span></tt> (as in BrainScaleS).
+An <tt class="docutils literal"><span class="pre">ls</span></tt> should show your folder for persistent data
+(under your user name or whatever you put instead of <tt class="docutils literal"><span class="pre">$USER</span></tt> in the <tt class="docutils literal"><span class="pre">docker</span> <span class="pre">run</span></tt> command above),
+as well as the directories <tt class="docutils literal"><span class="pre">mappingtool_test</span></tt>, <tt class="docutils literal"><span class="pre">neurotools</span></tt> and <tt class="docutils literal"><span class="pre">tutorial</span></tt>.</p>
+<p>To test your installation, you can run some unit tests.
+This is almost the same as with the installation below,
+just the mapping tool test is installed at another location:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># root@ess-container:/bss#</span>
+python mappingtool_test/regression/run_ess_tests.py
+python <span class="nv">$SYMAP2IC_PATH</span>/components/systemsim/test/regression/run_ess_tests.py
+python <span class="nv">$SYMAP2IC_PATH</span>/components/systemsim/test/system/run_ess_tests.py
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="installation-of-the-ess-pynn-0-8">
+<h2>Installation of the ESS (PyNN 0.8)<a class="headerlink" href="#installation-of-the-ess-pynn-0-8" title="Permalink to this headline">¶</a></h2>
+<p>By following this guideline, you will successfully install the current (as of March 2015) <cite>stable</cite> software stack of Heidelberg, containing the ESS, emulator of the BrainScaleS hardware system.
+You will have installed it together with the compatible PyNN version (0.8).</p>
+<p>Currently, a new software stack is under development which will replace the old one.</p>
+<div class="section" id="prerequisites-tested-on-a-native-ubuntu-saucy-13-10-on-a-64-bit-machine">
+<h3>Prerequisites (tested on a native Ubuntu saucy 13.10 on a 64-bit machine)<a class="headerlink" href="#prerequisites-tested-on-a-native-ubuntu-saucy-13-10-on-a-64-bit-machine" title="Permalink to this headline">¶</a></h3>
+<p>To be able to configure and compile the symap2ic project, you need to install the following libraries:</p>
+<div class="highlight-bash"><div class="highlight"><pre>apt-get -y install git python-pip python-dev build-essential libgtest-dev <span class="se">\</span>
+    libboost-all-dev libpng12-dev libssl-dev libmongo-client-dev mongodb <span class="se">\</span>
+    liblog4cxx10-dev autotools-dev automake
+</pre></div>
+</div>
+<p>The ESS expects the 64-bit libraries to lie either in /lib64 or /usr/lib64.
+However, in Ubuntu 13.10, the 64-bit libraries lie in /usr/lib/x86_64-linux-gnu.
+So, you need to make the following symbolic links:</p>
+<div class="highlight-bash"><div class="highlight"><pre>ln -s /usr/lib/x86_64-linux-gnu /usr/lib64
+ln -s /usr/lib/libmongoclient.a /usr/lib/x86_64-linux-gnu/libmongoclient.a
+</pre></div>
+</div>
+<p>To be able to run the tests and to use the ESS, you also need to install:</p>
+<div class="highlight-bash"><div class="highlight"><pre>apt-get -y install libgsl0-dev libncurses5-dev libreadline-dev gfortran <span class="se">\</span>
+    libfreetype6-dev libblas-dev liblapack-dev r-base python-rpy <span class="se">\</span>
+pip install scipy matplotlib PIL NeuroTools mpi4py xmlrunner
+</pre></div>
+</div>
+<p>Then, you install nest:</p>
+<div class="highlight-bash"><div class="highlight"><pre>wget http://www.nest-initiative.org/download/gplreleases/nest-2.2.2.tar.gz
+tar xvzf nest-2.2.2.tar.gz
+<span class="nb">cd </span>nest-2.2.2
+./configure --with-mpi --prefix<span class="o">=</span>/opt/nest --with-pynest-prefix<span class="o">=</span>/usr
+make
+make install
+python -c <span class="s1">&#39;import nest&#39;</span>
+</pre></div>
+</div>
+<p>You install pyNN (version 0.8 from the github NeuralEnsemble repository):</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd</span>
+git clone https://github.com/NeuralEnsemble/PyNN.git PyNN-8
+<span class="nb">cd </span>PyNN-8
+python setup.py install
+python -c <span class="s1">&#39;import pyNN.nest as sim&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="installation-of-the-ess">
+<h3>Installation of the ESS<a class="headerlink" href="#installation-of-the-ess" title="Permalink to this headline">¶</a></h3>
+<p>You should first obtain an account from <a class="reference external" href="https://gitviz.kip.uni-heidelberg.de">heidelberg</a>. Then, on your computer, you generate a rsa key:</p>
+<div class="highlight-bash"><div class="highlight"><pre>ssh-keygen -t rsa
+</pre></div>
+</div>
+<p>Suppose that you have saved the key in the file ~/.ssh/id_rsa. In the <a class="reference external" href="https://gitviz.kip.uni-heidelberg.de">heidelberg</a> website, you go to &#8216;My account&#8217; (upper-right).
+You click on &#8216;Public Key&#8217; in the upper-right corner.
+You click on &#8216;New value&#8217; and paste the content of your computer&#8217;s id_rsa.pub.
+Wait until the activation is done.</p>
+<p>Then, you can download and install the ESS on your computer:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd</span>
+git clone git@brainscales-r.kip.uni-heidelberg.de:symap2ic.git
+<span class="nb">cd </span>symap2ic
+<span class="nb">source </span>bootstrap.sh.UHEI .
+./waf set_config systemsim-pynn8
+./waf update
+</pre></div>
+</div>
+<p>If you have had problems in the execution of the 4 lines above, you have some read access right problems from the repositories.
+Please consult Eric Müller or the person in charge from Heidelberg.
+Please now go on by configuring and installing the system:</p>
+<div class="highlight-bash"><div class="highlight"><pre>./waf configure --stage<span class="o">=</span>brainscales --use-systemsim --without-hardware <span class="se">\</span>
+    --prefix<span class="o">=</span><span class="nv">$HOME</span>/symap2ic
+./waf install
+</pre></div>
+</div>
+<p>You now set the environment variables:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">echo</span> <span class="s1">&#39;export SYMAP2IC_PATH=$HOME/symap2ic&#39;</span> &gt;&gt; ~/.bashrc
+<span class="nb">echo</span> <span class="s1">&#39;export PYTHONPATH=$PYTHONPATH:$SYMAP2IC_PATH/lib&#39;</span> &gt;&gt; ~/.bashrc
+<span class="nb">echo</span> <span class="s1">&#39;export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$SYMAP2IC_PATH/lib&#39;</span> &gt;&gt; ~/.bashrc
+bash
+</pre></div>
+</div>
+<p>You test that the hardware backend is accessible:</p>
+<div class="highlight-bash"><div class="highlight"><pre>python -c <span class="s1">&#39;import pyNN.hardware.brainscales as sim&#39;</span>
+</pre></div>
+</div>
+<p>To test your installation, you can run the PyNN 0.8 unit- and system tests:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd</span> ~/PyNN-8/test
+<span class="nb">cd </span>unittests/backends
+nosetests test_mock.py
+nosetests test_hardware_brainscales.py
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="installation-of-the-ess-pynn-0-7">
+<h2>Installation of the ESS (PyNN 0.7)<a class="headerlink" href="#installation-of-the-ess-pynn-0-7" title="Permalink to this headline">¶</a></h2>
+<p>By following this guideline, you will successfully install the <cite>stable</cite> PyNN 0.7-based software stack of Heidelberg, containing the ESS, emulator of the BrainScaleS and of the Facets hardware.
+You will have installed it together with the compatible PyNN version (0.7).</p>
+<div class="section" id="id1">
+<h3>Prerequisites (tested on a native Ubuntu saucy 13.10 on a 64-bit machine)<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>To be able to configure and compile the symap2ic project, you need to install the following libraries:</p>
+<div class="highlight-bash"><div class="highlight"><pre>apt-get -y install git python-pip python-dev build-essential libgtest-dev <span class="se">\</span>
+    libboost-all-dev libpng12-dev libssl-dev libmongo-client-dev mongodb <span class="se">\</span>
+    liblog4cxx10-dev autotools-dev automake
+pip install numpy
+</pre></div>
+</div>
+<p>The ESS expects the 64-bit libraries to lie either in /lib64 or /usr/lib64.
+However, in Ubuntu 13.10, the 64-bit libraries lie in /usr/lib/x86_64-linux-gnu.
+So, you need to make the following symbolic links:</p>
+<div class="highlight-bash"><div class="highlight"><pre>ln -s /usr/lib/x86_64-linux-gnu /usr/lib64
+ln -s /usr/lib/libmongoclient.a /usr/lib/x86_64-linux-gnu/libmongoclient.a
+</pre></div>
+</div>
+<p>To be able to run the tests and to use the ESS, you also need to install:</p>
+<div class="highlight-bash"><div class="highlight"><pre>apt-get -y install libgsl0-dev libncurses5-dev libreadline-dev gfortran <span class="se">\</span>
+    libfreetype6-dev libblas-dev liblapack-dev r-base python-rpy
+pip install scipy matplotlib PIL NeuroTools mpi4py xmlrunner
+</pre></div>
+</div>
+<p>Then, you install nest:</p>
+<div class="highlight-bash"><div class="highlight"><pre>wget http://www.nest-initiative.org/download/gplreleases/nest-2.2.2.tar.gz
+tar xvzf nest-2.2.2.tar.gz
+<span class="nb">cd </span>nest-2.2.2
+./configure --with-mpi --prefix<span class="o">=</span>/opt/nest --with-pynest-prefix<span class="o">=</span>/usr
+make
+make install
+python -c <span class="s1">&#39;import nest&#39;</span>
+</pre></div>
+</div>
+<p>You install pyNN (version 0.7):</p>
+<div class="highlight-bash"><div class="highlight"><pre>pip install pyNN
+python -c <span class="s1">&#39;import pyNN.nest as sim&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h3>Installation of the ESS<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>You should first obtain an account from <a class="reference external" href="https://gitviz.kip.uni-heidelberg.de">heidelberg</a>. Then, on your computer, you generate a rsa key:</p>
+<div class="highlight-bash"><div class="highlight"><pre>ssh-keygen -t rsa
+</pre></div>
+</div>
+<p>Suppose that you have saved the key in the file ~/.ssh/id_rsa.
+In the <a class="reference external" href="https://gitviz.kip.uni-heidelberg.de">heidelberg</a> website, you go to &#8216;My account&#8217; (upper-right).
+You click on &#8216;Public Key&#8217; in the upper-right corner.
+You click on &#8216;New value&#8217; and paste the content of your computer&#8217;s id_rsa.pub. Wait until the activation is done.</p>
+<p>Then, you can download and install the ESS on your computer:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd</span>
+git clone git@brainscales-r.kip.uni-heidelberg.de:symap2ic.git
+<span class="nb">cd </span>symap2ic
+<span class="nb">source </span>bootstrap.sh.UHEI .
+./waf set_config systemsim
+</pre></div>
+</div>
+<p>If you have had problems in the execution of the 4 lines above, you have some read access right problems from the repositories.
+Please consult Eric Müller or the person in charge from Heidelberg.
+Please now go on by configuring and installing the system:</p>
+<div class="highlight-bash"><div class="highlight"><pre>./waf configure --stage<span class="o">=</span>brainscales --use-systemsim --without-hardware <span class="se">\</span>
+    --prefix<span class="o">=</span><span class="nv">$SYMAP2IC_PATH</span>
+./waf install
+</pre></div>
+</div>
+<p>You now set the environment variables:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">echo</span> <span class="s1">&#39;export SYMAP2IC_PATH=$HOME/symap2ic&#39;</span> &gt;&gt; ~/.bashrc
+<span class="nb">echo</span> <span class="s1">&#39;export PYTHONPATH=$PYTHONPATH:$SYMAP2IC_PATH/lib&#39;</span> &gt;&gt; ~/.bashrc
+<span class="nb">echo</span> <span class="s1">&#39;export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$SYMAP2IC_PATH/lib&#39;</span> &gt;&gt; ~/.bashrc
+bash
+</pre></div>
+</div>
+<p>You copy the pyNN hardware directory into pyNN:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd</span> <span class="nv">$SYMAP2IC_PATH</span>
+cp -r components/pynnhw/misc/pyNN_hardware_patch/hardware <span class="se">\</span>
+    /usr/local/lib/python2.7/dist-packages/pyNN/
+python -c <span class="s1">&#39;import pyNN.hardware.brainscales as sim&#39;</span>
+</pre></div>
+</div>
+<p>To test your installation, you can run some unit tests:</p>
+<div class="highlight-bash"><div class="highlight"><pre>python <span class="nv">$SYMAP2IC_PATH</span>/components/mappingtool/test/regression/run_ess_tests.py
+python <span class="nv">$SYMAP2IC_PATH</span>/components/systemsim/test/regression/run_ess_tests.py
+python <span class="nv">$SYMAP2IC_PATH</span>/components/systemsim/test/system/run_ess_tests.py
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="using-the-ess">
+<h2>Using the ESS<a class="headerlink" href="#using-the-ess" title="Permalink to this headline">¶</a></h2>
+<p>Scripts to run on the ESS should in general be identical to those that run on the PM hardware. The only required
+difference is that the <tt class="xref py py-func docutils literal"><span class="pre">setup()</span></tt> call must include the argument <tt class="docutils literal"><span class="pre">useSystemSim=True</span></tt>.</p>
+<p>In addition, there is an optional argument <tt class="docutils literal"><span class="pre">ess_params</span></tt>, which should be a dictionary containing the following
+parameters:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">perfectSynapseTrafo</span></tt></dt>
+<dd>Use a perfect synapse transformation, instead of the only available ideal synapse transformation [boolean].</dd>
+<dt><tt class="docutils literal"><span class="pre">weightDistortion</span></tt></dt>
+<dd><p class="first">Specifies the distortion of synaptic weights in the virtual hardware system.</p>
+<p class="last">This parameters define the fraction of the original value, that is used as
+the standard deviation for randomizing the weight according to a normal
+distribution around the original value.</p>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">pulseStatisticsFile</span></tt></dt>
+<dd>Name of file to which the ESS pulse statistics are written.</dd>
+</dl>
+<div class="section" id="perfect-synapse-transformation">
+<h3>Perfect Synapse Transformation<a class="headerlink" href="#perfect-synapse-transformation" title="Permalink to this headline">¶</a></h3>
+<p>Currently, there exists only one set of calibration data for the transformation of synaptic weights to the hardware.
+i.e., there is only one configuration of the synapse drivers, for which a calibration has been done in ideal transistor-level hardware simulations, such that one is restricted to exactly 16 different synaptic weight settings in the hardware.</p>
+<p>But, in principle, one can use different settings for the synapse drivers to allow a wider range of synaptic weights. This will be available in the near future.</p>
+<p>In order to already mimic this behavior with the ESS, one can choose the &#8220;perfect synapse transformation&#8221;, which generates different configurations of the synapse driver such that the associated synaptic weights match those specified in PyNN, at least within the 4-bit resolution of the digital weights.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">sim</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">useSystemSim</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">ess_params</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;perfectSynapseTrafo&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pulse-loss-statistics">
+<h3>Pulse Loss Statistics<a class="headerlink" href="#pulse-loss-statistics" title="Permalink to this headline">¶</a></h3>
+<p>The ESS allows to count all spikes that were lost in any place of the virtual hardware system.
+Spikes are mostly lost in the off-wafer communication network (also called &#8216;&#8217;Layer 2 network&#8217;&#8216;) that connects the wafer to the host PC.
+In the Layer 2 network pulse loss can happen on two routes:</p>
+<ol class="arabic simple">
+<li>Stimulation:
+not all spikes from the spike sources (<tt class="xref py py-class docutils literal"><span class="pre">SpikeSourcePoisson</span></tt> or <tt class="xref py py-class docutils literal"><span class="pre">SpikeSourceArray</span></tt>) are delivered to its targets, because the bandwidth in the off-wafer network is limited. When a spike is lost, it is lost for its targets.</li>
+<li>Recording:
+For the same bandwidth constraints in the off-wafer network, some spikes of real neurons can be lost on the route from the wafer to the FGPGAs, Hence, in the received spike data some events are missing.
+However, the &#8216;non-recorded&#8217; spikes did reach their target neurons on the wafer.</li>
+</ol>
+<p>Spikes can also be lost on the wafer, but only in rare cases when many neuron located on the same HICANN fire synchronously.</p>
+<ol class="arabic simple" start="3">
+<li>On-wafer Spike Loss:
+This is the case of pulses lost in the on-wafer pulse-communication system (also called <cite>Layer 1 network</cite>). If this happens, spikes are completely deleted, and reach no other neuron.</li>
+<li>Spike Drop before Simulation:
+The playback module of the FPGA, which plays back the stimuli pulses at given times, also has a limited bandwidth. This limitation is considered beforehand, such that spikes are dropped even before the simulation, in order to avoid a further delaying of many more spikes during an experiment.</li>
+</ol>
+<p>The ESS counts the lost and sent pulses.
+After the simulation, you will see something in the log for a loglevel&gt;=2:</p>
+<div class="highlight-python"><pre>INFO  Default *************************************
+INFO  Default LostEventLogger::summary
+INFO  Default Layer 2 events dropped before sim : 837/3939 (21.249 %)
+INFO  Default Layer 2 events lost :               243/3199 (7.59612 %)
+INFO  Default Layer 2 events lost downwards :     243/3102 (7.83366 %)
+INFO  Default Layer 2 events lost upwards   :     0/97 (0 %)
+INFO  Default Layer 1 events lost : 0/79 (0 %)
+INFO  Default *************************************</pre>
+</div>
+<p>You can specify to get this data by specifying a file <tt class="docutils literal"><span class="pre">pulseStatisticsFile</span></tt> in the setup command:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">sim</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">useSystemSim</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">ess_params</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;pulseStatisticsFile&#39;</span><span class="p">:</span> <span class="s">&#39;pulse_stats.py&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>Then the pulse statistics file contains a Python dictionary <tt class="docutils literal"><span class="pre">pulse_statistics</span></tt> which can be use for further processing:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pulse_statistics</span> <span class="o">=</span> <span class="p">{</span>
+<span class="s">&#39;l2_down_before_sim&#39;</span><span class="p">:</span> <span class="mi">3939</span><span class="p">,</span>
+<span class="s">&#39;l2_down_dropped_before_sim&#39;</span><span class="p">:</span> <span class="mi">837</span><span class="p">,</span>
+<span class="s">&#39;l2_down_sent&#39;</span><span class="p">:</span> <span class="mi">3102</span><span class="p">,</span>
+<span class="s">&#39;l2_down_lost&#39;</span><span class="p">:</span> <span class="mi">243</span><span class="p">,</span>
+<span class="s">&#39;l2_up_sent&#39;</span><span class="p">:</span> <span class="mi">97</span><span class="p">,</span>
+<span class="s">&#39;l2_up_lost&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="s">&#39;l1_neuron_sent&#39;</span><span class="p">:</span> <span class="mi">79</span><span class="p">,</span>
+<span class="s">&#39;l1_neuron_lost&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+            </div>
+
+            <aside class="hbpdoc-hnav hbpdoc-hnav-bottom">
+                
+                <span class="hbpdoc-hnav-previous">
+                    previous: <a class="hbpdoc-hnav-link" href="using_pm_newflow.html">Mapping to the Wafer-Scale System</a>
+                </span>
+                
+                
+                <span class="hbpdoc-hnav-next">
+                    next: <a class="hbpdoc-hnav-link" href="spikey.html">The Spikey &#8220;physical model&#8221; system</a>
+                </span>
+                
+            </aside>
+        </article>
+    </section>
+
+
+    <div class="hbpdoc-footer">
+        HBP Neuromorphic Computing Platform Guidebook <small>0.1</small> 
+    <div class="footer">
+        &copy; Copyright 2015, Andrew P. Davison, Eric Müller, Sebastian Schmitt, Bernhard Vogginger, David Lester, Thomas Pfeil, ....
+      Last updated on Sep 14, 2016 (2202a25, preliminary documentation).
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+    </div>
+</div>
+
+  </body>
+</html>
